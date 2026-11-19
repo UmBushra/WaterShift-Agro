@@ -2,10 +2,9 @@
 import itertools
 
 SALT_TOLERANT_DSM = 4.0  # assumption: threshold at/above this counts as salt tolerant
-YEAR_INDEX = {"rabi": 0, "kharif1": 1, "aman": 1}  # rabi starts the cycle; the rest fall in the next calendar year
 
 
-def generate_rotations(crops, season_slots=("rabi", "kharif1", "aman"), max_n=12):
+def generate_rotations(crops, season_slots=("aman", "rabi", "kharif1"), max_n=40):
     """Return up to max_n rotations as lists of {crop_id, season, year_index}."""
     pools = [crops[crops.season == s].to_dict("records") for s in season_slots]
     result = []
@@ -14,8 +13,13 @@ def generate_rotations(crops, season_slots=("rabi", "kharif1", "aman"), max_n=12
             continue
         if not any(c["is_legume"] or c["salinity_threshold_dsm"] >= SALT_TOLERANT_DSM for c in combo):
             continue
-        result.append([{"crop_id": c["crop_id"], "season": s, "year_index": YEAR_INDEX[s]}
-                       for c, s in zip(combo, season_slots)])
+        yi, prev, rot = 0, None, []
+        for c, s in zip(combo, season_slots):  # next calendar year when the sow month wraps around
+            if prev is not None and c["sow_month"] < prev:
+                yi += 1
+            rot.append({"crop_id": c["crop_id"], "season": s, "year_index": yi})
+            prev = c["sow_month"]
+        result.append(rot)
         if len(result) >= max_n:
             break
     return result

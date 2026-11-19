@@ -12,7 +12,7 @@ D = ROOT / "data" / "processed"
 
 
 def load():
-    return (pd.read_csv(D / "weather_daily.csv"), json.load(open(D / "soil.json")), pd.read_csv(D / "crops.csv"))
+    return (pd.read_csv(D / "weather_daily.csv"), json.load(open(D / "soil.json")), pd.read_csv(D / ("crops_sourced.csv" if (D / "crops_sourced.csv").exists() else "crops.csv")))
 
 
 def rank(weights, feasibility=0.7, irrigation_cap_mm=150.0):

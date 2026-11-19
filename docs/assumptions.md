@@ -6,3 +6,18 @@
 - scenarios.py: BAD_YEAR_QUANTILE = 0.10 (worst 10% by annual rain). Future climate not built.
 - data/processed/weather_daily.csv is SIMULATED synthetic data. crops.csv and soil.json values are placeholders (source = assumption).
 - NEX-GDDP-CMIP6 cannot represent sea-level rise or salinity intrusion (to state when future runs are added).
+- data_fetch.py: DEFAULT_LAT/LON = 22.33/89.11 (approximate Shyamnagar centre, replace with field coordinates); ELEVATION_M = 3.0 (only affects air pressure in ET0); DEFAULT_START/END = 2010-01-01..2024-12-31; MAX_GAP_DAYS = 3 (non-rain gaps interpolated, rain gaps raise).
+- data_fetch.py: soil field_capacity, wilting_point, ec_soil_dsm, ec_water_dsm stay assumptions (listed in soil.json assumed_fields). Soil `nitrogen` is stored as % N (SoilGrids g/kg / 10); the contract gave no unit, human to confirm.
+- data_fetch.py: GDDP_MODELS, GDDP_SCENARIOS, 2041-2060 window and 0.25 degree scale are a starter choice, unverified.
+- (Step 3) crops_sourced.csv: season, sow_month, harvest_month, duration_days are typical-calendar ASSUMPTIONS for all 11 crops (not checked against BRRI/BARI/DAE).
+- (Step 3) Table-range choices: rice Kc end 0.60; wheat Kc end 0.40; maize Kc end 0.35; mustard/sunflower Kc mid 1.075; tomato Kc end 0.80; mungbean Kc end 0.35 (see notes column).
+- (Step 3) Proxies: mustard = rapeseed/canola rows; chilli Kc = sweet pepper row; aus/aman/boro share one rice row. No saline-tolerant rice varieties modelled.
+- (Step 3) Blank on purpose (no source yet): tmax_stress_c, rain_need_mm, residue_t_ha, n_credit_kg_ha, cost_bdt_ha, yield_t_ha, price_bdt_t.
+- (Step 4) water_balance.py: ROOT_DEPTH_M = 0.5, P_DEPLETION = 0.5, STAGE_FRACTIONS = (0.2, 0.3, 0.3, 0.2), KY = 1.0, start-of-season soil at field capacity, irrigation refills to field capacity when depletion reaches RAW. All unsourced.
+- (Step 4) Missing crop fields (tmax_stress_c, residue_t_ha, n_credit_kg_ha) are skipped and reported in missing_inputs; they are not filled with guesses.
+- (Step 4b) Runoff = (1 - EFF_RAIN) x rain, i.e. the non-effective share of rain is treated as leaving the field. EFF_RAIN = 0.8 is still an unsourced assumption, so runoff is too. Drainage = water above field capacity after effective rain. No capillary rise, no lateral flow, no bund/ponding.
+- (Step 4b) Behaviour added: the crop cannot take more water than the root zone holds (eta is cut at the store). Not reached with current fixture values; covered by a unit test. Salt leaching still uses total rain, not drainage (not linked yet).
+- (Step 4b-constants) ROOT_DEPTH_M, P_DEPLETION, STAGE_FRACTIONS, KY in water_balance.py are now only FALLBACK defaults (still unsourced). Crop-specific values come from data/processed/crop_water_params.csv (FAO-56 Tables 22, 24, 11).
+- (Step 4b-constants) Root depth used = Table 22 minimum; the reason (shallow water table / saline subsoil in the delta) is an assumption. Table 11 stage rows are from other regions, picked by matching planting month where possible.
+- (Step 4b-constants) Rice p = 0.20 is relative to saturation but applied to a field-capacity bucket: known mismatch until ponding is built. Ky blank (default 1) for rice, mustard, mungbean.
+- (Step 4b-constants) NOT applied: ETc adjustment of p, soil-texture adjustment of p, growing root depth.
