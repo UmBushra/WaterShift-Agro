@@ -1,0 +1,1 @@
+weather_daily.csv: SIMULATED synthetic fixture (seeded random, not NASA POWER). crops.csv and soil.json: placeholder ASSUMPTIONS, unverified. DEMO ONLY.

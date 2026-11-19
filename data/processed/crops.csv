@@ -1,0 +1,7 @@
+crop_id,name,family,is_legume,season,sow_month,harvest_month,duration_days,kc_ini,kc_mid,kc_end,tmax_stress_c,rain_need_mm,salinity_threshold_dsm,salinity_slope_pct_per_dsm,residue_t_ha,n_credit_kg_ha,cost_bdt_ha,yield_t_ha,price_bdt_t,source
+sunflower,Sunflower (rabi),asteraceae,False,rabi,12,3,110,0.35,1.0,0.35,36,,4.8,5,2.0,0,,,,assumption: DEMO placeholder - verify FAO-56 and FAO-29
+grasspea,Grass pea (rabi),fabaceae,True,rabi,11,2,100,0.4,1.15,0.3,36,,2.0,10,1.0,20,,,,assumption: DEMO placeholder - verify FAO-56 and FAO-29
+mungbean,Mungbean (kharif-1),fabaceae,True,kharif1,3,6,65,0.4,1.05,0.6,38,,1.8,15,1.0,25,,,,assumption: DEMO placeholder - verify FAO-56 and FAO-29
+sesame,Sesame (kharif-1),pedaliaceae,False,kharif1,3,6,90,0.35,1.1,0.25,38,,2.5,10,1.5,0,,,,assumption: DEMO placeholder - verify FAO-56 and FAO-29
+aman_rice,Aman rice,poaceae,False,aman,7,11,130,1.05,1.2,0.75,36,,3.0,12,4.0,0,,,,assumption: DEMO placeholder - verify FAO-56 and FAO-29
+aman_rice_salttol,Aman rice (salt-tolerant variety),poaceae,False,aman,7,11,135,1.05,1.2,0.75,36,,6.0,8,4.0,0,,,,assumption: DEMO placeholder - variety values need BRRI source
